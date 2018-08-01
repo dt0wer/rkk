@@ -1,0 +1,15 @@
+version: '3.5'
+services:
+  consul:
+    image: consul
+    ports:
+      - "8500:8500"
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+  git2consul:
+    image: cimpress/git2consul
+    depends_on: 
+      - consul
+    volumes:
+      - /tmp/git2consul.d:/etc/git2consul.d
+    command: --endpoint consul --port 8500 --config-file /etc/git2consul.d/config.json
