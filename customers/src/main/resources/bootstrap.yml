@@ -11,6 +11,7 @@ spring:
         format: FILES
         prefix: configuration/master
         enabled: true
+        failFast: false
   application:
     name: customers
 management:
