@@ -38,6 +38,13 @@ public class CustomerController {
         return "Customer service version: " + getVersion;
     }
 
+    @RequestMapping("/bah")
+    public String bah() {
+        return loadbalancedRestTemplate.getForObject("http://application/app/bah", String.class);
+    }
+
+
+
     @RequestMapping("/discoveryClient")
     public String discoveryPing() throws RestClientException,
             ServiceUnavailableException {
