@@ -9,7 +9,7 @@ buildscript {
 }
 
 plugins {
-    id "com.palantir.docker" version "0.13.0"
+    id "com.palantir.docker" version "0.20.0"
 }
 
 apply plugin: 'java'
@@ -22,6 +22,12 @@ group 'ru.gpb.rkk'
 version '0.0.1'
 
 sourceCompatibility = 1.8
+
+bootJar {
+    baseName = 'customers'
+    version =  '0.1.0'
+}
+
 
 repositories {
     mavenCentral()
