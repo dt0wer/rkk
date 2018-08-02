@@ -50,6 +50,13 @@ public class CustomerController {
         return "IP "+ip+" ;Customer service version: " + getVersion;
     }
 
+    @RequestMapping("/bah")
+    public String bah() {
+        return loadbalancedRestTemplate.getForObject("http://application/app/bah", String.class);
+    }
+
+
+
     @RequestMapping("/discoveryClient")
     public String discoveryPing() throws RestClientException,
             ServiceUnavailableException {

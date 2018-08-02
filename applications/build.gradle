@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-    id "com.palantir.docker" version "0.13.0"
+    id "com.palantir.docker" version "0.20.1"
 }
 
 
@@ -50,4 +50,8 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-consul-all:2.0.0.RELEASE'
     compile "org.springframework.boot:spring-boot-starter-actuator"
     testCompile("junit:junit")
+}
+
+task printPATH {
+    println System.getenv("PATH")
 }

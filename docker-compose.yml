@@ -25,6 +25,25 @@ services:
     volumes:
       - /tmp/git2consul.d:/etc/git2consul.d
     command: --endpoint consul --port 8500 --config-file /etc/git2consul.d/config.json
+  application:
+    image: appservice
+    ports:
+      - "8090:8082"
+    depends_on:
+      - consul
+  application2:
+    image: appservice
+    ports:
+      - "8091:8082"
+    depends_on:
+      - consul
+  customer:
+    image: customerservice
+    ports:
+      - "8092:8081"
+    depends_on:
+      - consul
+
   fabio:
     image: fabiolb/fabio:latest
     ports:
