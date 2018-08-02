@@ -1,13 +1,13 @@
 spring:
   cloud:
     consul:
-      host: consul
+      host: localhost
       port: 8500
       discovery:
         instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
         healthCheckPath: ${management.context-path}/health
         healthCheckInterval: 15s
-        tags: urlprefix-/home/ , urlprefix-/discoveryClient/
+        tags: urlprefix-/home, urlprefix-/discoveryclient
       config:
         format: FILES
         prefix: configuration/master

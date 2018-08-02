@@ -1,6 +1,7 @@
 package ru.gpb.rkk.controllers;
 
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
@@ -38,6 +39,7 @@ public class CustomerController {
         this.loadbalancedRestTemplate = loadbalancedRestTemplate;
     }
 
+    @HystrixCommand(fallbackMethod = "whitePage")
     @RequestMapping("/home")
     public String home() {
 
@@ -50,6 +52,10 @@ public class CustomerController {
         return "IP "+ip+" ;Customer service version: " + getVersion;
     }
 
+    public String whitePage() {
+        return "Whitepage";
+    }
+
     @RequestMapping("/bah")
     public String bah() {
         return loadbalancedRestTemplate.getForObject("http://application/app/bah", String.class);
@@ -57,7 +63,7 @@ public class CustomerController {
 
 
 
-    @RequestMapping("/discoveryClient")
+    @RequestMapping("/discoveryclient")
     public String discoveryPing() throws RestClientException,
             ServiceUnavailableException {
 //        URI service = serviceUrl()
