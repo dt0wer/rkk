@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,16 @@ public class ApplicationController {
     @RequestMapping(value = "/application/info", method= RequestMethod.GET)
     public String applicationInfo() {
         return "Application " + restTemplate.getForObject("http://customers/discoveryClient", String.class);
+    }
+
+    @RequestMapping(value = "/application", method= RequestMethod.GET)
+    public String application() {
+        return "/application " + id;
+    }
+
+    @RequestMapping(value = "/application/test/{var}", method= RequestMethod.GET)
+    public String application(@PathVariable String var) {
+        return "/application/test/"+ var + " " + id;
     }
 
     @RequestMapping(value = "/app/bah", method= RequestMethod.GET)

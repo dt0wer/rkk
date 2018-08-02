@@ -27,12 +27,14 @@ services:
     command: --endpoint consul --port 8500 --config-file /etc/git2consul.d/config.json
   application:
     image: appservice
+    container_name: app_service1
     ports:
       - "8090:8082"
     depends_on:
       - consul
   application2:
     image: appservice
+    container_name: app_service2
     ports:
       - "8091:8082"
     depends_on:
