@@ -38,7 +38,7 @@ public class CustomerController {
         this.loadbalancedRestTemplate = loadbalancedRestTemplate;
     }
 
-    @RequestMapping("/")
+    @RequestMapping("/home")
     public String home() {
 
         String ip = null;
@@ -57,7 +57,7 @@ public class CustomerController {
 //                .map(s -> s.resolve("/application/info"))
 //                .orElseThrow(ServiceUnavailableException::new);
 
-        return this.loadbalancedRestTemplate.getForObject("http://customers/", String.class);
+        return this.loadbalancedRestTemplate.getForObject("http://customers/home", String.class);
 
     }
 

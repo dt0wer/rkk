@@ -6,6 +6,18 @@ services:
       - "8500:8500"
     environment:
       - CONSUL_BIND_INTERFACE=eth0
+  customer_service:
+    image: maksimstsiapanau/customer_service
+    depends_on:
+      - consul
+    ports:
+      - "7777:8081"
+  customer_service2:
+    image: maksimstsiapanau/customer_service
+    depends_on:
+      - consul
+    ports:
+      - "7778:8081"
   git2consul:
     image: cimpress/git2consul
     depends_on: 
@@ -13,3 +25,12 @@ services:
     volumes:
       - /tmp/git2consul.d:/etc/git2consul.d
     command: --endpoint consul --port 8500 --config-file /etc/git2consul.d/config.json
+  fabio:
+    image: fabiolb/fabio:latest
+    ports:
+      - "9999:9999"
+      - "9998:9998"
+    depends_on:
+      - consul
+    volumes:
+      - "/tmp/fabio.properties:/etc/fabio/fabio.properties"

@@ -7,6 +7,7 @@ spring:
         instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
         healthCheckPath: ${management.context-path}/health
         healthCheckInterval: 15s
+        tags: urlprefix-/home/ , urlprefix-/discoveryClient/
       config:
         format: FILES
         prefix: configuration/master
