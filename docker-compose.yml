@@ -37,12 +37,6 @@ services:
       - "8091:8082"
     depends_on:
       - consul
-  customer:
-    image: customerservice
-    ports:
-      - "8092:8081"
-    depends_on:
-      - consul
 
   fabio:
     image: fabiolb/fabio:latest
