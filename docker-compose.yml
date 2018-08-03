@@ -6,6 +6,14 @@ services:
       - "8500:8500"
     environment:
       - CONSUL_BIND_INTERFACE=eth0
+  router:
+    image: maksimstsiapanau/nginx-consul:latest
+    volumes:
+      - "/tmp/customers.conf:/etc/consul-template/templates/customers.conf"
+      - "/tmp/customers.hcl:/etc/consul-template/conf/customers.hcl"
+    ports:
+      - "9090:9090"
+      - "8443:443"
   customer_service:
     image: maksimstsiapanau/customer_service
     depends_on:
@@ -25,19 +33,6 @@ services:
     volumes:
       - /tmp/git2consul.d:/etc/git2consul.d
     command: --endpoint consul --port 8500 --config-file /etc/git2consul.d/config.json
-  application:
-    image: appservice
-    ports:
-      - "8090:8082"
-    depends_on:
-      - consul
-  application2:
-    image: appservice
-    ports:
-      - "8091:8082"
-    depends_on:
-      - consul
-
   fabio:
     image: fabiolb/fabio:latest
     ports:
@@ -47,3 +42,5 @@ services:
       - consul
     volumes:
       - "/tmp/fabio.properties:/etc/fabio/fabio.properties"
+    environment:
+      - SERVICE_9998_TAGS=urlprefix-/fabio
