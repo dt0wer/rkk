@@ -8,3 +8,6 @@ http://localhost:8500
 # Fabio server side load balancig (not main)
 http://localhost:9998 (roating table)
 http://localhost:9999/home (request)
+
+# Run it
+docker-compose up 
