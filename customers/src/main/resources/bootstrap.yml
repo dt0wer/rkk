@@ -1,5 +1,12 @@
 spring:
   cloud:
+    bus:
+      enabled: true
+    stream:
+      kafka:
+        binder:
+          brokers: kafka.test:9092
+      default-binder: kafka
     consul:
       host: localhost
       port: 8500
