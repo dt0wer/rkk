@@ -30,8 +30,11 @@ bootJar {
 
 
 repositories {
-    mavenCentral()
-    jcenter()
+    maven {
+        url "${NEXUS_URL}"
+    }
+//    mavenCentral()
+//    jcenter()
 }
 
 docker {
@@ -43,13 +46,17 @@ docker {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-consul-dependencies:2.0.0.RELEASE"
+        mavenBom 'org.springframework.cloud:spring-cloud-bus:2.0.0.RELEASE'
     }
 }
 
 dependencies {
+    compile "org.jetbrains:annotations:15.0"
     implementation 'org.springframework.cloud:spring-cloud-starter-consul-all'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard:2.0.1.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix:2.0.1.RELEASE'
+    implementation 'org.springframework.cloud:spring-cloud-starter-bus-kafka'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
