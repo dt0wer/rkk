@@ -1,11 +1,20 @@
+import com.github.javaparser.ast.*;
+import com.github.javaparser.*
+import com.github.javaparser.ast.expr.AnnotationExpr
+import com.github.javaparser.ast.stmt.ThrowStmt
+import com.github.javaparser.ast.visitor.*
+import com.github.javaparser.ast.body.*
+
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
+        classpath('com.github.javaparser:javaparser-core:3.6.15')
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE")
     }
 }
+
 
 plugins {
     id "com.palantir.docker" version "0.20.1"
@@ -48,10 +57,36 @@ dependencies {
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation "io.springfox:springfox-bean-validators:2.9.2"
     implementation 'org.springframework.cloud:spring-cloud-starter-consul-all:2.0.0.RELEASE'
-    compile "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix:2.0.1.RELEASE'
     testCompile("junit:junit")
 }
 
-task printPATH {
-    println System.getenv("PATH")
+class MethodVisitor extends VoidVisitorAdapter<Void> {
+    @Override
+     void visit(MethodDeclaration n, Void arg) {
+        def annotation = n.getAnnotationByName("RequestMapping");
+        if (annotation.isPresent()) {
+            println(String.format("Method: %s Annotation: %s", n.getName(), annotation.get()))
+            n.accept(new ThrowsVisitor(),null)
+        }
+        super.visit(n, arg);
+    }
+}
+
+class ThrowsVisitor extends VoidVisitorAdapter<Void> {
+    @Override
+    void visit(ThrowStmt n, Void arg) {
+        println("Throws stmt: " + n)
+        super.visit(n, arg)
+    }
+}
+
+task printSourceFiles {
+    sourceSets.main.allJava.srcDirs.forEach({
+        fileTree(it).each {File file ->
+            JavaParser.parse(new FileInputStream(file))
+                     .accept(new MethodVisitor(),null)
+        }
+    })
 }
