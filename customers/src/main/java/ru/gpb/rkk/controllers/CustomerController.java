@@ -2,28 +2,40 @@ package ru.gpb.rkk.controllers;
 
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import ru.gpb.rkk.bus.event.TestRemoteApplicationEvent;
 
 import javax.naming.ServiceUnavailableException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 public class CustomerController {
 
-    private String getVersion;
-    private DiscoveryClient discoveryClient;
-    private RestTemplate loadbalancedRestTemplate;
+    @NotNull
+    private final String getVersion;
+
+    @NotNull
+    private final DiscoveryClient discoveryClient;
+
+    @NotNull
+    private final RestTemplate loadbalancedRestTemplate;
+
+    @NotNull
+    private final ApplicationContext context;
 
     public Optional<URI> serviceUrl() {
         List<ServiceInstance> instances =  discoveryClient.getInstances("application");
@@ -33,10 +45,14 @@ public class CustomerController {
     }
 
     @Autowired
-    public CustomerController(String getVersion, DiscoveryClient discoveryClient,RestTemplate loadbalancedRestTemplate) {
+    public CustomerController(@NotNull String getVersion,
+                              @NotNull DiscoveryClient discoveryClient,
+                              @NotNull RestTemplate loadbalancedRestTemplate,
+                              @NotNull ApplicationContext context) {
         this.getVersion = getVersion;
         this.discoveryClient = discoveryClient;
         this.loadbalancedRestTemplate = loadbalancedRestTemplate;
+        this.context = context;
     }
 
     @HystrixCommand(fallbackMethod = "whitePage")
@@ -72,6 +88,19 @@ public class CustomerController {
 
         return this.loadbalancedRestTemplate.getForObject("http://customers/home", String.class);
 
+    }
+
+    @RequestMapping(value = "/event", method= RequestMethod.GET)
+    public String event() {
+        final String contextId = context.getId();
+        final String message = "Hello from, customer service. time=" + new Date().toString();
+        TestRemoteApplicationEvent event = new TestRemoteApplicationEvent(
+                this,
+                contextId,
+                "/customers/**",
+                message);
+        context.publishEvent(event);
+        return message;
     }
 
 }

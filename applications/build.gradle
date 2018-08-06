@@ -1,22 +1,10 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE")
-    }
-}
-
 plugins {
+    id "java"
+    id "idea"
+    id "org.springframework.boot" version "2.0.3.RELEASE"
+    id "io.spring.dependency-management" version "1.0.4.RELEASE"
     id "com.palantir.docker" version "0.20.1"
 }
-
-
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'com.palantir.docker'
 
 bootJar {
     baseName = 'app'
@@ -24,8 +12,11 @@ bootJar {
 }
 
 repositories {
-    mavenCentral()
-    jcenter()
+    maven {
+        url "${NEXUS_URL}"
+    }
+//    mavenCentral()
+//    jcenter()
 }
 
 sourceCompatibility = 1.10
@@ -37,7 +28,15 @@ docker {
     buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
 }
 
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-consul-dependencies:2.0.1.RELEASE'
+        mavenBom 'org.springframework.cloud:spring-cloud-bus:2.0.0.RELEASE'
+    }
+}
+
 dependencies {
+    compile "org.jetbrains:annotations:15.0"
     implementation("org.springframework.boot:spring-boot-starter-web")
    // implementation("org.springframework.boot:spring-boot-starter-jdbc")
    // implementation("org.postgresql:postgresql:42.2.1")
@@ -47,7 +46,10 @@ dependencies {
     //implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation "io.springfox:springfox-bean-validators:2.9.2"
-    implementation 'org.springframework.cloud:spring-cloud-starter-consul-all:2.0.0.RELEASE'
+    implementation 'org.springframework.cloud:spring-cloud-starter-consul-all'
+//    implementation 'org.springframework.cloud:spring-cloud-starter-consul-discovery'
+//    implementation 'org.springframework.cloud:spring-cloud-starter-consul-config'
+    implementation 'org.springframework.cloud:spring-cloud-starter-bus-kafka'
     compile "org.springframework.boot:spring-boot-starter-actuator"
     testCompile("junit:junit")
 }
