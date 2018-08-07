@@ -1,5 +1,5 @@
 storage "consul" {
-  address = "127.0.0.1:8500"
+  address = "consul:8500"
   path    = "vault"
   token   = "b1gs33cr3t"
 }
@@ -9,7 +9,3 @@ listener "tcp" {
   tls_disable = 1
 }
 
-#telemetry {
-#  statsite_address = "127.0.0.1:8125"
-#  disable_hostname = true
-#}

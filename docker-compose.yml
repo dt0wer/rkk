@@ -67,6 +67,17 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     ports:
       - "9092:9092"  
+  vault:
+    image: vault
+    ports:
+      - "8200:8200"
+    depends_on:
+      - consul
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - ./vault_config.json:/etc/vault/vault_config.json
+    command: server -config /etc/vault/vault_config.json
  # fabio:
  #   image: fabiolb/fabio:latest
  #   ports:
