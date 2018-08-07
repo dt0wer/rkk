@@ -73,6 +73,8 @@ services:
       - "8200:8200"
     depends_on:
       - consul
+    environment:
+      VAULT_ADDR: 'http://127.0.0.1:8200'
     cap_add:
       - IPC_LOCK
     volumes:
