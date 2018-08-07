@@ -4,6 +4,8 @@ services:
     image: consul
     ports:
       - "8500:8500"
+    volumes:
+      - "./consul_config.json:/consul/config/config.json"
     environment:
       - CONSUL_BIND_INTERFACE=eth0
   router:
