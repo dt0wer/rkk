@@ -1,3 +1,24 @@
+<<<<<<< HEAD
+import com.github.javaparser.ast.*;
+import com.github.javaparser.*
+import com.github.javaparser.ast.expr.AnnotationExpr
+import com.github.javaparser.ast.stmt.ThrowStmt
+import com.github.javaparser.ast.visitor.*
+import com.github.javaparser.ast.body.*
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath('com.github.javaparser:javaparser-core:3.6.15')
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE")
+    }
+}
+
+
+=======
+>>>>>>> 5a2acbf03d2d42c0de49b88ef81ac2ab0d2f26cd
 plugins {
     id "java"
     id "idea"
@@ -46,14 +67,45 @@ dependencies {
     //implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation "io.springfox:springfox-bean-validators:2.9.2"
+<<<<<<< HEAD
+    implementation 'org.springframework.cloud:spring-cloud-starter-consul-all:2.0.0.RELEASE'
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix:2.0.1.RELEASE'
+=======
     implementation 'org.springframework.cloud:spring-cloud-starter-consul-all'
 //    implementation 'org.springframework.cloud:spring-cloud-starter-consul-discovery'
 //    implementation 'org.springframework.cloud:spring-cloud-starter-consul-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-kafka'
     compile "org.springframework.boot:spring-boot-starter-actuator"
+>>>>>>> 5a2acbf03d2d42c0de49b88ef81ac2ab0d2f26cd
     testCompile("junit:junit")
 }
 
-task printPATH {
-    println System.getenv("PATH")
+class MethodVisitor extends VoidVisitorAdapter<Void> {
+    @Override
+     void visit(MethodDeclaration n, Void arg) {
+        def annotation = n.getAnnotationByName("RequestMapping");
+        if (annotation.isPresent()) {
+            println(String.format("Method: %s Annotation: %s", n.getName(), annotation.get()))
+            n.accept(new ThrowsVisitor(),null)
+        }
+        super.visit(n, arg);
+    }
+}
+
+class ThrowsVisitor extends VoidVisitorAdapter<Void> {
+    @Override
+    void visit(ThrowStmt n, Void arg) {
+        println("Throws stmt: " + n)
+        super.visit(n, arg)
+    }
+}
+
+task printSourceFiles {
+    sourceSets.main.allJava.srcDirs.forEach({
+        fileTree(it).each {File file ->
+            JavaParser.parse(new FileInputStream(file))
+                     .accept(new MethodVisitor(),null)
+        }
+    })
 }
