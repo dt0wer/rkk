@@ -28,6 +28,20 @@ services:
       - consul
     ports:
       - "7778:8081"
+  application:
+    image: pbarbashov/appservice
+    container_name: app_service1
+    ports:
+      - "8090:8082"
+    depends_on:
+      - consul
+  application2:
+    image: pbarbashov/appservice
+    container_name: app_service2
+    ports:
+      - "8091:8082"
+    depends_on:
+      - consul
   git2consul:
     image: cimpress/git2consul
     depends_on: 
@@ -35,14 +49,32 @@ services:
     volumes:
       - ./config.json:/etc/git2consul.d/config.json
     command: --endpoint consul --port 8500 --config-file /etc/git2consul.d/config.json
-  fabio:
-    image: fabiolb/fabio:latest
-    ports:
-      - "9999:9999"
-      - "9998:9998"
-    depends_on:
-      - consul
-    volumes:
-      - "./fabio.properties:/etc/fabio/fabio.properties"
+  zookeeper:
+    image: confluentinc/cp-zookeeper
     environment:
-      - SERVICE_9998_TAGS=urlprefix-/fabio
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+  kafka:
+    image: confluentinc/cp-kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"  
+ # fabio:
+ #   image: fabiolb/fabio:latest
+ #   ports:
+ #     - "9999:9999"
+ #     - "9998:9998"
+ #   depends_on:
+ #     - consul
+ #   volumes:
+ #     - "./fabio.properties:/etc/fabio/fabio.properties"
+ #   environment:
+ #     - SERVICE_9998_TAGS=urlprefix-/fabio
