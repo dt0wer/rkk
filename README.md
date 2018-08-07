@@ -4,10 +4,15 @@ replace home on url from source code.
 
 Based on:
 https://medium.com/@ladislavGazo/easy-routing-and-service-discovery-with-docker-consul-and-nginx-acfd48e1a291
+
 https://github.com/seges/docker-nginx-consul
+
 https://github.com/hashicorp/consul-template
+
 https://github.com/hashicorp/consul-template/blob/master/examples/nginx.md
+
 https://habr.com/post/262397/
+
 
 Load balancing strategies:
 
