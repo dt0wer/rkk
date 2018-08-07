@@ -19,11 +19,14 @@ http://localhost:8500
 
 Documentation:
 https://cloud.spring.io/spring-cloud-static/spring-cloud-consul/1.3.4.RELEASE/multi/multi_spring-cloud-consul.html
+
 https://projects.spring.io/spring-cloud/spring-cloud.html#_circuit_breaker_hystrix_clients
+
 https://github.com/spring-cloud/spring-cloud-consul/blob/master/docs/src/main/asciidoc/spring-cloud-consul.adoc
 
 ACL
 https://www.consul.io/docs/guides/acl.html
+
 https://www.consul.io/docs/agent/options.html
 
 # Git2consul
