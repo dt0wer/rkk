@@ -5,10 +5,10 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: kafka.test:9092
+          brokers: kafka:9092
       default-binder: kafka
     consul:
-      host: localhost
+      host: consul
       port: 8500
       config:
         failFast: true

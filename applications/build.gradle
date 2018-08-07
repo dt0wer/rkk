@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.*
 import com.github.javaparser.ast.expr.AnnotationExpr
@@ -16,9 +16,6 @@ buildscript {
     }
 }
 
-
-=======
->>>>>>> 5a2acbf03d2d42c0de49b88ef81ac2ab0d2f26cd
 plugins {
     id "java"
     id "idea"
@@ -33,11 +30,11 @@ bootJar {
 }
 
 repositories {
-    maven {
+/*    maven {
         url "${NEXUS_URL}"
-    }
-//    mavenCentral()
-//    jcenter()
+    }*/
+    mavenCentral()
+    jcenter()
 }
 
 sourceCompatibility = 1.10
@@ -57,7 +54,7 @@ dependencyManagement {
 }
 
 dependencies {
-    compile "org.jetbrains:annotations:15.0"
+    implementation "org.jetbrains:annotations:15.0"
     implementation("org.springframework.boot:spring-boot-starter-web")
    // implementation("org.springframework.boot:spring-boot-starter-jdbc")
    // implementation("org.postgresql:postgresql:42.2.1")
@@ -67,17 +64,11 @@ dependencies {
     //implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation "io.springfox:springfox-bean-validators:2.9.2"
-<<<<<<< HEAD
     implementation 'org.springframework.cloud:spring-cloud-starter-consul-all:2.0.0.RELEASE'
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix:2.0.1.RELEASE'
-=======
-    implementation 'org.springframework.cloud:spring-cloud-starter-consul-all'
-//    implementation 'org.springframework.cloud:spring-cloud-starter-consul-discovery'
-//    implementation 'org.springframework.cloud:spring-cloud-starter-consul-config'
+
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-kafka'
-    compile "org.springframework.boot:spring-boot-starter-actuator"
->>>>>>> 5a2acbf03d2d42c0de49b88ef81ac2ab0d2f26cd
     testCompile("junit:junit")
 }
 
