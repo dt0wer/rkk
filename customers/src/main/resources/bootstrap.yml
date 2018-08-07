@@ -20,6 +20,20 @@ spring:
         prefix: configuration/master
         enabled: true
         failFast: false
+    vault:
+      host: localhost
+      port: 8200
+      scheme: http
+      connection-timeout: 5000
+      read-timeout: 5000
+      config:
+        order: -10
+      token: 62b24a41-fb31-eb4d-315d-a47e5c1a421c
+      consul:
+        enabled: true
+        role: readonly
+        backend: consul
+        token-property: spring.cloud.consul.token
   application:
     name: customers
 management:
