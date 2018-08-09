@@ -13,8 +13,8 @@ services:
     depends_on:
       - consul
     volumes:
-      - "./customers.conf:/etc/consul-template/templates/customers.conf"
-      - "./customers.hcl:/etc/consul-template/conf/customers.hcl"
+      - "./rkk_lb.conf:/etc/consul-template/templates/rkk_lb.conf"
+      - "./rkk_lb.hcl:/etc/consul-template/conf/rkk_lb.hcl"
     ports:
       - "9090:9090"
       - "8443:443"
@@ -34,17 +34,8 @@ services:
       - "7778:8081"
   application:
     image: pbarbashov/appservice
-    container_name: app_service1
     ports:
-      - "8090:8082"
-    depends_on:
-      - consul
-      - git2consul
-  application2:
-    image: pbarbashov/appservice
-    container_name: app_service2
-    ports:
-      - "8091:8082"
+      - 8082
     depends_on:
       - consul
       - git2consul
