@@ -1,10 +1,12 @@
 package ru.gpb.rkk.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 
-@ConfigurationProperties("example")
-public class MyConfiguration {
+@Component
+@ConfigurationProperties("customers")
+public class VaultConfiguration {
 
     private String username;
 

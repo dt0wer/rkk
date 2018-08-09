@@ -1,14 +1,17 @@
 spring:
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: ${random.value}
+      pollTimeout: 3000
+      concurrency: 1
+    self:
+      instanceId:  customers_1
+      groupId: customers
+      topic: customersTopic
   cloud:
-    bus:
-      enabled: true
-    stream:
-      kafka:
-        binder:
-          brokers: kafka.test:9092
-      default-binder: kafka
     consul:
-      host: localhost
+      host: 80.78.249.80
       port: 8500
       discovery:
         instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
@@ -21,14 +24,14 @@ spring:
         enabled: true
         failFast: false
     vault:
-      host: localhost
+      host: 80.78.249.80
       port: 8200
       scheme: http
       connection-timeout: 5000
       read-timeout: 5000
       config:
         order: -10
-      token: 62b24a41-fb31-eb4d-315d-a47e5c1a421c
+      token: 360984c8-5bdd-8678-f096-c0bd5e570af4
       consul:
         enabled: true
         role: readonly

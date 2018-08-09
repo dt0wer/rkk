@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.gpb.rkk.bus.event.TestRemoteApplicationEvent;
 
 @Component
+@Deprecated
 public class TestEventListener implements ApplicationListener<TestRemoteApplicationEvent> {
 
     @NotNull

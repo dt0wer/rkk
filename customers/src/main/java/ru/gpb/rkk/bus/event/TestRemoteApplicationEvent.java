@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.cloud.bus.event.RemoteApplicationEvent;
 
 @JsonTypeName("TestRemoteEvent")
+@Deprecated
 public class TestRemoteApplicationEvent extends RemoteApplicationEvent {
 
     @Nullable

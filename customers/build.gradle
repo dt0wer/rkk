@@ -57,9 +57,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix:2.0.1.RELEASE'
-    implementation 'org.springframework.cloud:spring-cloud-starter-bus-kafka'
+    implementation 'org.springframework.kafka:spring-kafka:2.1.7.RELEASE'
     implementation 'org.springframework.cloud:spring-cloud-vault-config-consul:2.0.1.RELEASE'
     implementation 'org.springframework.spring-cloud-starter-vault-config:2.0.1.RELEASE'
+    implementation 'org.projectlombok:lombok:1.18.2'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
