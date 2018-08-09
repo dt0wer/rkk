@@ -31,7 +31,7 @@ spring:
       read-timeout: 5000
       config:
         order: -10
-      token: 360984c8-5bdd-8678-f096-c0bd5e570af4
+      token: 54c4b9cf-c37a-8784-a465-3bab828549dd
       consul:
         enabled: true
         role: readonly

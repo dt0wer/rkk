@@ -10,6 +10,8 @@ services:
       - CONSUL_BIND_INTERFACE=eth0
   router:
     image: maksimstsiapanau/nginx-consul:latest
+    depends_on:
+      - consul
     volumes:
       - "./customers.conf:/etc/consul-template/templates/customers.conf"
       - "./customers.hcl:/etc/consul-template/conf/customers.hcl"
@@ -20,12 +22,14 @@ services:
     image: maksimstsiapanau/customer_service
     depends_on:
       - consul
+      - git2consul
     ports:
       - "7777:8081"
   customer_service2:
     image: maksimstsiapanau/customer_service
     depends_on:
       - consul
+      - git2consul
     ports:
       - "7778:8081"
   application:
@@ -35,6 +39,7 @@ services:
       - "8090:8082"
     depends_on:
       - consul
+      - git2consul
   application2:
     image: pbarbashov/appservice
     container_name: app_service2
@@ -42,6 +47,7 @@ services:
       - "8091:8082"
     depends_on:
       - consul
+      - git2consul
   git2consul:
     image: cimpress/git2consul
     depends_on: 
