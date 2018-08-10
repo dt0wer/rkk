@@ -6,14 +6,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.kafka.listener.AcknowledgingMessageListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
+import ru.integrations.commons.Message;
 
 @Service
-public class GroupKafkaListener implements AcknowledgingMessageListener<String, String> {
+public class GroupKafkaListener implements AcknowledgingMessageListener<String, Message> {
 
     private static Logger logger = LoggerFactory.getLogger(GroupKafkaListener.class);
 
     @Override
-    public void onMessage(ConsumerRecord<String, String> data, Acknowledgment acknowledgment) {
+    public void onMessage(ConsumerRecord<String, Message> data, Acknowledgment acknowledgment) {
 
         try {
             processMessage(data);
@@ -24,9 +25,9 @@ public class GroupKafkaListener implements AcknowledgingMessageListener<String, 
         }
     }
 
-    private void processMessage(ConsumerRecord<String, String> data) throws Exception {
+    private void processMessage(ConsumerRecord<String, Message> data) throws Exception {
 
-        String messageValue = data.value();
+        Message messageValue = data.value();
         logger.info("Message: {}", messageValue);
 
 
