@@ -12,8 +12,8 @@ import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.AbstractMessageListenerContainer;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.listener.config.ContainerProperties;
-import ru.gpb.rkk.listeners.GroupKafkaListener;
-import ru.gpb.rkk.listeners.SpecificKafkaListener;
+import ru.gpb.rkk.integrations.listeners.GroupKafkaListener;
+import ru.gpb.rkk.integrations.listeners.SpecificKafkaListener;
 
 import java.util.HashMap;
 import java.util.Map;

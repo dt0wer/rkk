@@ -1,4 +1,4 @@
-package ru.gpb.rkk.dto;
+package ru.gpb.rkk.integrations.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
