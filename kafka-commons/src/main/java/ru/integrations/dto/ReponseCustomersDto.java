@@ -6,8 +6,7 @@ import ru.integrations.commons.Message;
 
 @Data
 @AllArgsConstructor
-public class ResponseApplicationDto implements Message {
+public class ReponseCustomersDto implements Message {
 
     private String response;
-
 }
