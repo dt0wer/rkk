@@ -1,4 +1,4 @@
-package ru.gpb.rkk.config;
+package ru.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -12,8 +12,8 @@ import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.AbstractMessageListenerContainer;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.listener.config.ContainerProperties;
-import ru.gpb.rkk.listeners.GroupKafkaListener;
-import ru.gpb.rkk.listeners.SpecificKafkaListener;
+import ru.listeners.GroupKafkaListener;
+import ru.listeners.SpecificKafkaListener;
 
 import java.util.HashMap;
 import java.util.Map;

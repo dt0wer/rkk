@@ -1,4 +1,4 @@
-package ru.gpb.rkk.integrations.listeners;
+package ru.gpb.rkk.listeners;
 
 import org.springframework.kafka.annotation.KafkaListener;
 

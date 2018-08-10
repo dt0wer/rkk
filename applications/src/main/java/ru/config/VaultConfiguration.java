@@ -1,4 +1,4 @@
-package ru.gpb.rkk.config;
+package ru.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

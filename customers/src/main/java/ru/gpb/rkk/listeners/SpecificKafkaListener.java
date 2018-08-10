@@ -1,4 +1,4 @@
-package ru.gpb.rkk.integrations.listeners;
+package ru.gpb.rkk.listeners;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;

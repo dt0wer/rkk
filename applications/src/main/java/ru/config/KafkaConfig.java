@@ -1,4 +1,4 @@
-package ru.gpb.rkk.config;
+package ru.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

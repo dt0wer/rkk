@@ -1,4 +1,4 @@
-package ru.gpb.rkk.integrations.commons;
+package ru.integrations.commons;
 
 /**
  *

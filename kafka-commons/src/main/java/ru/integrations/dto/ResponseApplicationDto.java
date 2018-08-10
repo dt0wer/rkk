@@ -1,4 +1,4 @@
-package ru.gpb.rkk.integrations.dto;
+package ru.integrations.dto;
 
 import lombok.Data;
 

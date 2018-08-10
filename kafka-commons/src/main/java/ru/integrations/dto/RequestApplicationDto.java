@@ -1,8 +1,8 @@
-package ru.gpb.rkk.integrations.dto;
+package ru.integrations.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.gpb.rkk.integrations.commons.Message;
+import ru.integrations.commons.Message;
 
 @Data
 @AllArgsConstructor
