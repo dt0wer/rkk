@@ -71,6 +71,7 @@ dependencies {
     compile project(":kafka-commons")
     testCompile("junit:junit")
 }
+/*
 
 class MethodVisitor extends VoidVisitorAdapter<Void> {
     @Override
@@ -99,4 +100,4 @@ task printSourceFiles {
                      .accept(new MethodVisitor(),null)
         }
     })
-}
+}*/
