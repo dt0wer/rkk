@@ -20,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import ru.gpb.rkk.bus.event.TestRemoteApplicationEvent;
 import ru.gpb.rkk.config.KafkaConfig;
 import ru.gpb.rkk.config.VaultConfiguration;
-import ru.gpb.rkk.dto.VaultDto;
+import ru.gpb.rkk.integrations.dto.VaultDto;
 
 import java.net.InetAddress;
 import java.net.URI;
