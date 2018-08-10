@@ -10,4 +10,6 @@ public class RequestApplicationDto implements Message {
 
     private String applicationId;
 
+    public RequestApplicationDto() {
+    }
 }

@@ -9,4 +9,7 @@ import ru.integrations.commons.Message;
 public class RequestCustomersDto implements Message {
 
     private String applicationId;
+
+    public RequestCustomersDto() {
+    }
 }

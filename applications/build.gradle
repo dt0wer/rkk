@@ -67,8 +67,8 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-consul-all:2.0.0.RELEASE'
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix:2.0.1.RELEASE'
+    implementation "org.springframework.kafka:spring-kafka:2.1.7.RELEASE"
     compile project(":kafka-commons")
-    implementation 'org.springframework.cloud:spring-cloud-starter-bus-kafka'
     testCompile("junit:junit")
 }
 

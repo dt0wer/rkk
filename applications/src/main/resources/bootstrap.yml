@@ -1,14 +1,7 @@
 spring:
   cloud:
-    bus:
-      enabled: true
-    stream:
-      kafka:
-        binder:
-          brokers: kafka:9092
-      default-binder: kafka
     consul:
-      host: consul
+      host: 80.78.249.80
       port: 8500
       config:
         failFast: true

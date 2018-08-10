@@ -10,4 +10,6 @@ public class ResponseApplicationDto implements Message {
 
     private String response;
 
+    public ResponseApplicationDto() {
+    }
 }

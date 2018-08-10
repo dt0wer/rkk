@@ -9,4 +9,7 @@ import ru.integrations.commons.Message;
 public class ReponseCustomersDto implements Message {
 
     private String response;
+
+    public ReponseCustomersDto() {
+    }
 }
