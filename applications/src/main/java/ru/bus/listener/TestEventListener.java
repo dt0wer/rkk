@@ -8,7 +8,10 @@ import org.springframework.cloud.bus.ServiceMatcher;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import ru.bus.event.TestRemoteApplicationEvent;
-
+/*
+Spring cloud bus не берем
+ */
+@Deprecated
 @Component
 public class TestEventListener implements ApplicationListener<TestRemoteApplicationEvent> {
 

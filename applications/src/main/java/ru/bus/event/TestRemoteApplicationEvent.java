@@ -3,7 +3,10 @@ package ru.bus.event;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.cloud.bus.event.RemoteApplicationEvent;
-
+/*
+Spring cloud bus не берем
+ */
+@Deprecated
 @JsonTypeName("TestRemoteEvent")
 public class TestRemoteApplicationEvent extends RemoteApplicationEvent {
 
