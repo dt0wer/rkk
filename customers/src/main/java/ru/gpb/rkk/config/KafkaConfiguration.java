@@ -61,6 +61,7 @@ public class KafkaConfiguration {
         props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, Message.class);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, this.kafkaConfig.getGroupConsumer().getGroupId());
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
         return props;
     }
 
@@ -74,6 +75,7 @@ public class KafkaConfiguration {
         props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, Message.class);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, this.kafkaConfig.getSpecificConsumer().getGroupId());
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
         return props;
     }
 
