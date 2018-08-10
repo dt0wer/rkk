@@ -5,5 +5,8 @@ pluginManagement {
         }
     }
 }
-rootProject.name = 'customers'
 
+rootProject.name = 'rkk'
+include ':applications'
+include ':customers'
+include ':kafka-commons'

@@ -37,8 +37,8 @@ repositories {
     jcenter()
 }
 
-sourceCompatibility = 1.10
-targetCompatibility = 1.10
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 docker {
     name "appservice"
@@ -67,7 +67,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-consul-all:2.0.0.RELEASE'
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix:2.0.1.RELEASE'
-
+    compile project(":kafka-commons")
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-kafka'
     testCompile("junit:junit")
 }
