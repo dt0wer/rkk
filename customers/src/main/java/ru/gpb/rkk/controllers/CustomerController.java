@@ -21,6 +21,9 @@ import ru.gpb.rkk.bus.event.TestRemoteApplicationEvent;
 import ru.gpb.rkk.config.KafkaConfig;
 import ru.gpb.rkk.config.VaultConfiguration;
 import ru.gpb.rkk.dto.VaultDto;
+import ru.integrations.commons.Headers;
+import ru.integrations.commons.Message;
+import ru.integrations.dto.RequestApplicationDto;
 
 import java.net.InetAddress;
 import java.net.URI;
@@ -48,7 +51,7 @@ public class CustomerController {
     private final ApplicationContext context;
 
     @NotNull
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, Message> kafkaTemplate;
 
     @NotNull
     private VaultConfiguration configuration;
@@ -62,7 +65,7 @@ public class CustomerController {
     public CustomerController(@NotNull String getVersion,
                               @NotNull DiscoveryClient discoveryClient,
                               @NotNull RestTemplate loadbalancedRestTemplate,
-                              @NotNull ApplicationContext context, @NotNull KafkaTemplate<String, String> kafkaTemplate, @NotNull VaultConfiguration configuration, @NotNull ConsulDiscoveryProperties properties, KafkaConfig kafkaConfig) {
+                              @NotNull ApplicationContext context, @NotNull KafkaTemplate<String, Message> kafkaTemplate, @NotNull VaultConfiguration configuration, @NotNull ConsulDiscoveryProperties properties, KafkaConfig kafkaConfig) {
         this.getVersion = getVersion;
         this.discoveryClient = discoveryClient;
         this.loadbalancedRestTemplate = loadbalancedRestTemplate;
@@ -82,8 +85,12 @@ public class CustomerController {
     public void sentToKafka() {
 
         //send message
-        String message = "Hello world";
-        ProducerRecord<String, String> producerRecord = new ProducerRecord<>("customersTopic", UUID.randomUUID().toString(), message);
+        String applicationId = UUID.randomUUID().toString();
+        ProducerRecord<String, Message> producerRecord = new ProducerRecord<>(this.kafkaConfig.getApplication().getGroupTopic(), UUID.randomUUID().toString(), new RequestApplicationDto(applicationId));
+        producerRecord.headers().add(Headers.GPB_SOURCE_INSTANCE_ID.name(),this.kafkaConfig.getSpecificConsumer().getGroupId().getBytes());
+        producerRecord.headers().add(Headers.GPB_REPLY_TOPIC_NAME.name(),this.kafkaConfig.getSpecificConsumer().getTopic().getBytes());
+        producerRecord.headers().add(Headers.GPB_MESSAGE_ID.name(),UUID.randomUUID().toString().getBytes());
+        producerRecord.headers().add(Headers.GPB_VERSION.name(),"1".getBytes());
         this.kafkaTemplate.send(producerRecord);
     }
 
