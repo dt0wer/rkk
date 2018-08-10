@@ -10,14 +10,13 @@ import java.util.Map;
 @Configuration
 @ConfigurationProperties(prefix = "kafka")
 @Data
-public class KafkaConfig  {
+public class KafkaConfig {
 
     private Map<String, Object> properties;
     private String bootstrapServers;
     private Consumer groupConsumer;
     private Consumer specificConsumer;
-    private  Producer application;
-    private Producer bpm;
+    private Producers producers;
 
     public KafkaConfig() {
         this.properties = new HashMap<>();
@@ -36,6 +35,13 @@ public class KafkaConfig  {
     public static class Producer {
 
         private String groupTopic;
-        private  String specificTopic;
+        private String specificTopic;
+    }
+
+    @Data
+    public static class Producers {
+
+        private Producer application;
+        private Producer bpm;
     }
 }

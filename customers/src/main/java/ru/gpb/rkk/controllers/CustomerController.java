@@ -86,7 +86,7 @@ public class CustomerController {
 
         //send message
         String applicationId = UUID.randomUUID().toString();
-        ProducerRecord<String, Message> producerRecord = new ProducerRecord<>(this.kafkaConfig.getApplication().getGroupTopic(), UUID.randomUUID().toString(), new RequestApplicationDto(applicationId));
+        ProducerRecord<String, Message> producerRecord = new ProducerRecord<>(this.kafkaConfig.getProducers().getApplication().getGroupTopic(), UUID.randomUUID().toString(), new RequestApplicationDto(applicationId));
         producerRecord.headers().add(Headers.GPB_SOURCE_INSTANCE_ID.name(),this.kafkaConfig.getSpecificConsumer().getGroupId().getBytes());
         producerRecord.headers().add(Headers.GPB_REPLY_TOPIC_NAME.name(),this.kafkaConfig.getSpecificConsumer().getTopic().getBytes());
         producerRecord.headers().add(Headers.GPB_MESSAGE_ID.name(),UUID.randomUUID().toString().getBytes());
