@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import ru.gpb.rkk.bus.event.TestRemoteApplicationEvent;
+import ru.gpb.rkk.config.KafkaConfig;
 import ru.gpb.rkk.config.VaultConfiguration;
 import ru.gpb.rkk.dto.VaultDto;
 
@@ -55,11 +56,13 @@ public class CustomerController {
     @NotNull
     private ConsulDiscoveryProperties properties;
 
+    private KafkaConfig kafkaConfig;
+
     @Autowired
     public CustomerController(@NotNull String getVersion,
                               @NotNull DiscoveryClient discoveryClient,
                               @NotNull RestTemplate loadbalancedRestTemplate,
-                              @NotNull ApplicationContext context, @NotNull KafkaTemplate<String, String> kafkaTemplate, @NotNull VaultConfiguration configuration, @NotNull ConsulDiscoveryProperties properties) {
+                              @NotNull ApplicationContext context, @NotNull KafkaTemplate<String, String> kafkaTemplate, @NotNull VaultConfiguration configuration, @NotNull ConsulDiscoveryProperties properties, KafkaConfig kafkaConfig) {
         this.getVersion = getVersion;
         this.discoveryClient = discoveryClient;
         this.loadbalancedRestTemplate = loadbalancedRestTemplate;
@@ -67,6 +70,7 @@ public class CustomerController {
         this.kafkaTemplate = kafkaTemplate;
         this.configuration = configuration;
         this.properties = properties;
+        this.kafkaConfig = kafkaConfig;
     }
 
     @RequestMapping("/read_vault")

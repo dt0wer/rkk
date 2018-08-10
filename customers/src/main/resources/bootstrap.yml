@@ -1,17 +1,7 @@
 spring:
-  kafka:
-    bootstrap-servers: kafka:9092
-    consumer:
-      group-id: ${random.value}
-      pollTimeout: 3000
-      concurrency: 1
-    self:
-      instanceId:  customers_1
-      groupId: customers
-      topic: customersTopic
   cloud:
     consul:
-      host: 80.78.249.80
+      host: consul
       port: 8500
       discovery:
         instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
@@ -24,14 +14,14 @@ spring:
         enabled: true
         failFast: false
     vault:
-      host: 80.78.249.80
+      host: vault
       port: 8200
       scheme: http
       connection-timeout: 5000
       read-timeout: 5000
       config:
         order: -10
-      token: 54c4b9cf-c37a-8784-a465-3bab828549dd
+      token: 8d4497a0-47c6-72d2-88c7-d121d28b6e3c
       consul:
         enabled: true
         role: readonly
@@ -39,10 +29,3 @@ spring:
         token-property: spring.cloud.consul.token
   application:
     name: customers
-management:
-  endpoints:
-    web:
-      exposure:
-        include: hystrix.stream, info, health
-      base-path: /actuator
-

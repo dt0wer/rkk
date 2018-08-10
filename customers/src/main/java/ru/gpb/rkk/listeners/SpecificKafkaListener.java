@@ -8,9 +8,9 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 
 @Service
-public class KafkaListener implements AcknowledgingMessageListener<String, String> {
+public class SpecificKafkaListener implements AcknowledgingMessageListener<String, String> {
 
-    private static Logger logger = LoggerFactory.getLogger(KafkaListener.class);
+    private static Logger logger = LoggerFactory.getLogger(SpecificKafkaListener.class);
 
     @Override
     public void onMessage(ConsumerRecord<String, String> data, Acknowledgment acknowledgment) {
