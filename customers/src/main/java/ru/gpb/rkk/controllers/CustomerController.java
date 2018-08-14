@@ -12,6 +12,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -92,6 +93,8 @@ public class CustomerController {
         producerRecord.headers().add(Headers.GPB_REPLY_TOPIC_NAME.name(),this.kafkaConfig.getSpecificConsumer().getTopic().getBytes());
         producerRecord.headers().add(Headers.GPB_MESSAGE_ID.name(),UUID.randomUUID().toString().getBytes());
         producerRecord.headers().add(Headers.GPB_VERSION.name(),"1".getBytes());
+        producerRecord.headers().add(KafkaHeaders.REPLY_TOPIC,this.kafkaConfig.getSpecificConsumer().getTopic().getBytes());
+
         this.kafkaTemplate.send(producerRecord);
 
 
@@ -101,6 +104,7 @@ public class CustomerController {
         producerRecord.headers().add(Headers.GPB_REPLY_TOPIC_NAME.name(),this.kafkaConfig.getSpecificConsumer().getTopic().getBytes());
         producerRecord.headers().add(Headers.GPB_MESSAGE_ID.name(),UUID.randomUUID().toString().getBytes());
         producerRecord.headers().add(Headers.GPB_VERSION.name(),"1".getBytes());
+        producerRecord.headers().add(KafkaHeaders.REPLY_TOPIC,this.kafkaConfig.getSpecificConsumer().getTopic().getBytes());
         this.kafkaTemplate.send(producerRecord);
     }
 

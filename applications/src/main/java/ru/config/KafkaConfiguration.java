@@ -13,7 +13,9 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.AbstractMessageListenerContainer;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.util.concurrent.ListenableFuture;
 import ru.integrations.commons.Message;
 
 
@@ -33,9 +35,7 @@ public class KafkaConfiguration {
 
     @Bean
     public KafkaTemplate<String, Message> kafkaTemplate() {
-        KafkaTemplate<String, Message> stringMessageKafkaTemplate = new KafkaTemplate<>(producerFactory());
-        stringMessageKafkaTemplate.setDefaultTopic("errorTopic");
-        return stringMessageKafkaTemplate;
+        return new KafkaTemplate<>(producerFactory());
     }
 
     @Bean
@@ -60,7 +60,7 @@ public class KafkaConfiguration {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, org.springframework.kafka.support.serializer.JsonDeserializer.class);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, this.kafkaConfig.getGroupConsumer().getGroupId());
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return props;
     }
 
@@ -72,7 +72,7 @@ public class KafkaConfiguration {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, org.springframework.kafka.support.serializer.JsonDeserializer.class);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, this.kafkaConfig.getSpecificConsumer().getGroupId());
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return props;
     }
 
@@ -84,6 +84,7 @@ public class KafkaConfiguration {
         factory.setConcurrency(this.kafkaConfig.getSpecificConsumer().getConcurrency());
         factory.getContainerProperties().setPollTimeout(this.kafkaConfig.getSpecificConsumer().getPollTimeout());
         factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL);
+        factory.setReplyTemplate(kafkaTemplate());
         return factory;
     }
 
