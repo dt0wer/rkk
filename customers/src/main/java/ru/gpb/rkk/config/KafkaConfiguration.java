@@ -8,19 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.AbstractMessageListenerContainer;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
-import org.springframework.kafka.listener.config.ContainerProperties;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import ru.gpb.rkk.listeners.GroupKafkaListener;
-import ru.gpb.rkk.listeners.SpecificKafkaListener;
 import ru.integrations.commons.Message;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Kafka configuration
+ */
 @Configuration
 @EnableKafka
 public class KafkaConfiguration {
@@ -48,6 +50,7 @@ public class KafkaConfiguration {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, this.kafkaConfig.getBootstrapServers());
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        //props.putAll(this.kafkaConfig.getProperties());  uncomment if need properties (e.g ssl configuration)
         return props;
     }
 
@@ -57,11 +60,10 @@ public class KafkaConfiguration {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, this.kafkaConfig.getBootstrapServers());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(JsonDeserializer.KEY_DEFAULT_TYPE, "java.lang.String");
-        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, Message.class);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, this.kafkaConfig.getGroupConsumer().getGroupId());
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        //props.putAll(this.kafkaConfig.getProperties());  uncomment if need properties (e.g ssl configuration)
         return props;
     }
 
@@ -71,36 +73,35 @@ public class KafkaConfiguration {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, this.kafkaConfig.getBootstrapServers());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(JsonDeserializer.KEY_DEFAULT_TYPE, "java.lang.String");
-        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, Message.class);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, this.kafkaConfig.getSpecificConsumer().getGroupId());
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        //props.putAll(this.kafkaConfig.getProperties());  uncomment if need properties (e.g ssl configuration)
         return props;
     }
 
     @Bean
-    public ConcurrentMessageListenerContainer<String, Message> groupKafkaListenerContainer(
-            GroupKafkaListener messageListener) {
-        ContainerProperties containerProperties = new ContainerProperties(this.kafkaConfig.getGroupConsumer().getTopic());
-        containerProperties.setMessageListener(messageListener);
-        containerProperties.setPollTimeout(this.kafkaConfig.getGroupConsumer().getPollTimeout());
-        containerProperties.setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL);
-        ConcurrentMessageListenerContainer<String, Message> concurrentMessageListenerContainer = new ConcurrentMessageListenerContainer<>(groupConsumerFactory(), containerProperties);
-        concurrentMessageListenerContainer.setConcurrency(this.kafkaConfig.getGroupConsumer().getConcurrency());
-        return concurrentMessageListenerContainer;
+    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Message>> specificKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Message> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(specificConsumerFactory());
+        factory.setConcurrency(this.kafkaConfig.getSpecificConsumer().getConcurrency());
+        factory.getContainerProperties().setPollTimeout(this.kafkaConfig.getSpecificConsumer().getPollTimeout());
+        factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL);
+        factory.setReplyTemplate(kafkaTemplate());
+        return factory;
     }
 
     @Bean
-    public ConcurrentMessageListenerContainer<String, Message> specificKafkaListenerContainer(
-            SpecificKafkaListener messageListener) {
-        ContainerProperties containerProperties = new ContainerProperties(this.kafkaConfig.getSpecificConsumer().getTopic());
-        containerProperties.setMessageListener(messageListener);
-        containerProperties.setPollTimeout(this.kafkaConfig.getSpecificConsumer().getPollTimeout());
-        containerProperties.setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL);
-        ConcurrentMessageListenerContainer<String, Message> concurrentMessageListenerContainer = new ConcurrentMessageListenerContainer<>(specificConsumerFactory(), containerProperties);
-        concurrentMessageListenerContainer.setConcurrency(this.kafkaConfig.getSpecificConsumer().getConcurrency());
-        return concurrentMessageListenerContainer;
+    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Message>> groupKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Message> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(groupConsumerFactory());
+        factory.setConcurrency(this.kafkaConfig.getGroupConsumer().getConcurrency());
+        factory.getContainerProperties().setPollTimeout(this.kafkaConfig.getGroupConsumer().getPollTimeout());
+        factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL);
+        factory.setReplyTemplate(kafkaTemplate());
+        return factory;
     }
 
 

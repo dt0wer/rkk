@@ -5,8 +5,18 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 
+/**
+ *
+ * Vault properties. Example contains sample of read encrypted data from vault server.
+ *
+ * Encrypted information MUST be add to vault storage backend (we use consul)
+ *
+ * Vault command for this example:
+ *
+ * vault write secret/customers customers.username=demouser customers.password=demopassword
+ *
+ */
 @Component
-@RefreshScope
 @ConfigurationProperties("customers")
 public class VaultConfiguration {
 

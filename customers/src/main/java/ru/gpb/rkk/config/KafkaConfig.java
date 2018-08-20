@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Kafka properties from config file (customers.yml)
+ */
 @Configuration
 @ConfigurationProperties(prefix = "kafka")
 @Data

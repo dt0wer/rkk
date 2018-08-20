@@ -8,6 +8,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Service configuration. This example contains sample of refreshable part of config (customers.yml)
+ * <p>
+ * Config file of service storing in git repository with name like name of service. Automatically configuration
+ * is put in Consul server via git2consul application
+ */
 @Configuration
 @RefreshScope
 public class CustomerConfig {
@@ -20,9 +26,4 @@ public class CustomerConfig {
         return this.version;
     }
 
-    @LoadBalanced
-    @Bean
-    public RestTemplate loadbalancedRestTemplate() {
-        return new RestTemplate();
-    }
 }
