@@ -1,0 +1,20 @@
+###
+#   Database Settings
+###
+spring:
+  datasource:
+    dbcp2:
+      password: posgtres
+      username: postgres
+      url:  jdbc:postgresql://localhost:5432/client-service
+      driver-class-name: org.postgresql.Driver
+
+# Hibernate properties
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: validate
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
