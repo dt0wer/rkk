@@ -8,6 +8,7 @@ import ru.gpb.rkk.clientservice.service.ClientService;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -32,5 +33,11 @@ public class ClientServiceImpl implements ClientService {
         Client client = clientRepository.getClientIdByNameBirthDateAndIdentityDoc(firstName, lastName, patronymicName,
                 documentNumber, documentSeries, documentNumber, birthDate);
         return client !=null ? client.getClientId() : null;
+    }
+
+    @Override
+    public Client getCliendById(Long id) {
+        Optional<Client> res = clientRepository.findById(id);
+        return res.isPresent()? res.get() : null;
     }
 }

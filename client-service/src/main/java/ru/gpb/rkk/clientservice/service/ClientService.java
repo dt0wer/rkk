@@ -15,4 +15,5 @@ public interface ClientService {
                                                     String documentSeries,
                                                     String documentNumber,
                                                     Date birthDate);
+    public Client getCliendById (Long id);
 }

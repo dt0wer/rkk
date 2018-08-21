@@ -11,6 +11,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "kafka")
 @Data
 public class KafkaConfig {
+
     private Map<String, Object> properties;
     private String bootstrapServers;
     private Consumer groupConsumer;
