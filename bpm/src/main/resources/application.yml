@@ -1,0 +1,42 @@
+server:
+  port: 8083
+service:
+  name: bpm
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream, info, health
+      base-path: /actuator
+kafka:
+  bootstrapServers: kafka:9092
+  properties:
+    "[ssl.keystore.location]": /path
+    "[ssl.keystore.password]": 12345
+    "[ssl.keystore.type]": JKS
+    "[ssl.key.password]": 12345
+    "[ssl.truststore.location]": /path
+    "[ssl.truststore.password]": 12345
+    "[ssl.truststore.type]": JKS
+    "[ssl.enabled.protocols]": TLSv1.2
+    "[security.protocol]": SSL
+  groupConsumer:
+    groupId: ${spring.application.name}
+    pollTimeout: 3000
+    concurrency: 1
+    topic: ${spring.application.name}_group
+  specificConsumer:
+    groupId: ${spring.cloud.consul.discovery.instanceId}
+    pollTimeout: 3000
+    concurrency: 1
+    topic: ${spring.application.name}_specific
+  producers:
+    application:
+      groupTopic:  application_group
+      specificTopic: application_specific
+    customers:
+      groupTopic:  customers_group
+      specificTopic: customers_specific
+    bpm:
+      groupTopic:  bpm_group
+      specificTopic: bpm_specific

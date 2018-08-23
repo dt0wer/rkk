@@ -11,4 +11,5 @@ include ':applications'
 include ':customers'
 include ':kafka-commons'
 include ':client-service'
+include 'bpm'
 

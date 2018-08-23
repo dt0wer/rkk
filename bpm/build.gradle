@@ -1,0 +1,69 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE")
+        classpath("io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE")
+    }
+}
+
+plugins {
+    id "java"
+    id "maven"
+    id "idea"
+    id "org.springframework.boot" version "2.0.3.RELEASE"
+    id "io.spring.dependency-management" version "1.0.4.RELEASE"
+    id "com.palantir.docker" version "0.20.1"
+    id 'application'
+}
+
+bootJar {
+    baseName = 'bpm'
+    version =  '0.1.0'
+}
+
+group = 'ru.gpb.rkk'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+docker {
+    name "bpm_service"
+    files bootJar.archivePath
+    buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+}
+
+dependencyManagement {
+    imports {
+//        mavenBom 'org.springframework.cloud:spring-cloud-consul-dependencies:2.0.1.RELEASE'
+    }
+}
+
+mainClassName = 'ru.gpb.rkk.Application'
+
+dependencies {
+    compile group: 'org.camunda.bpm.springboot', name: 'camunda-bpm-spring-boot-starter-webapp', version:'3.0.0'
+    compile group: 'org.camunda.bpm.extension.osgi', name: 'camunda-bpm-osgi-root', version: '4.1.0', ext: 'pom'
+    compile group: 'org.camunda.bpm.extension.osgi', name: 'camunda-bpm-osgi', version: '4.1.0'
+    compile group: 'com.h2database', name: 'h2', version:'1.4.197'
+    compile group: 'org.postgresql', name: 'postgresql', version: '9.3-1100-jdbc4'
+
+//    implementation 'org.springframework.cloud:spring-cloud-starter-consul-all'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard:2.0.1.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix:2.0.1.RELEASE'
+    implementation 'org.springframework.kafka:spring-kafka:2.1.7.RELEASE'
+//    implementation 'org.springframework.cloud:spring-cloud-vault-config-consul:2.0.1.RELEASE'
+//    implementation 'org.springframework.cloud:spring-cloud-starter-vault-config:2.0.1.RELEASE'
+    implementation 'org.projectlombok:lombok:1.18.2'
+    compile project(":kafka-commons")
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
