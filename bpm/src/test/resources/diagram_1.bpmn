@@ -1,38 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_18wqi4b" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.16.2">
-  <bpmn:process id="TestProcess" name="TestProcess" isExecutable="true" camunda:versionTag="1">
-    <bpmn:startEvent id="StartEvent_1">
-      <bpmn:outgoing>SequenceFlow_03sdpin</bpmn:outgoing>
-    </bpmn:startEvent>
-    <bpmn:task id="Task_0nqpiyf">
-      <bpmn:incoming>SequenceFlow_03sdpin</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_14xv239</bpmn:outgoing>
-    </bpmn:task>
-    <bpmn:endEvent id="EndEvent_10awo7o">
-      <bpmn:incoming>SequenceFlow_14xv239</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_03sdpin" sourceRef="StartEvent_1" targetRef="Task_0nqpiyf" />
-    <bpmn:sequenceFlow id="SequenceFlow_14xv239" sourceRef="Task_0nqpiyf" targetRef="EndEvent_10awo7o" />
-  </bpmn:process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TestProcess">
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="173" y="102" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_0nqpiyf_di" bpmnElement="Task_0nqpiyf">
-        <dc:Bounds x="323" y="80" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_10awo7o_di" bpmnElement="EndEvent_10awo7o">
-        <dc:Bounds x="549" y="102" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_03sdpin_di" bpmnElement="SequenceFlow_03sdpin">
-        <di:waypoint x="209" y="120" />
-        <di:waypoint x="323" y="120" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_14xv239_di" bpmnElement="SequenceFlow_14xv239">
-        <di:waypoint x="423" y="120" />
-        <di:waypoint x="549" y="120" />
-      </bpmndi:BPMNEdge>
-    </bpmndi:BPMNPlane>
-  </bpmndi:BPMNDiagram>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_18wqi4b"
+                  targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.16.2">
+    <bpmn:process id="TestProcess" name="TestProcess" isExecutable="true" camunda:versionTag="1">
+        <bpmn:startEvent id="StartEvent_1">
+            <bpmn:outgoing>SequenceFlow_03sdpin</bpmn:outgoing>
+        </bpmn:startEvent>
+        <bpmn:endEvent id="EndEvent_10awo7o">
+            <bpmn:incoming>SequenceFlow_14xv239</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="SequenceFlow_03sdpin" sourceRef="StartEvent_1" targetRef="TestUserTask"/>
+        <bpmn:sequenceFlow id="SequenceFlow_14xv239" sourceRef="TestUserTask" targetRef="EndEvent_10awo7o"/>
+        <bpmn:userTask id="TestUserTask" name="TestUserTask" camunda:assignee="Ivan">
+            <bpmn:incoming>SequenceFlow_03sdpin</bpmn:incoming>
+            <bpmn:outgoing>SequenceFlow_14xv239</bpmn:outgoing>
+        </bpmn:userTask>
+    </bpmn:process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TestProcess">
+            <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+                <dc:Bounds x="173" y="102" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="EndEvent_10awo7o_di" bpmnElement="EndEvent_10awo7o">
+                <dc:Bounds x="549" y="102" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_03sdpin_di" bpmnElement="SequenceFlow_03sdpin">
+                <di:waypoint x="209" y="120"/>
+                <di:waypoint x="323" y="120"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_14xv239_di" bpmnElement="SequenceFlow_14xv239">
+                <di:waypoint x="423" y="120"/>
+                <di:waypoint x="549" y="120"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape id="UserTask_15kpepu_di" bpmnElement="TestUserTask">
+                <dc:Bounds x="323" y="80" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
 </bpmn:definitions>

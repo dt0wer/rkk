@@ -18,6 +18,8 @@ import ru.gpb.rkk.config.KafkaConfig;
 import ru.integrations.commons.Headers;
 import ru.integrations.commons.Message;
 import org.springframework.web.multipart.MultipartFile;
+import ru.integrations.dto.bpm.CompleteTasksRequestDto;
+import ru.integrations.dto.bpm.GetTasksRequestDto;
 import ru.integrations.dto.bpm.StartProcessRequestDto;
 
 import java.io.IOException;
@@ -34,8 +36,8 @@ public class BpmRestController {
     @Autowired
     private KafkaTemplate<String, Message> kafkaTemplate;
 
-    @RequestMapping(value = "rest/deploy/create", method= RequestMethod.POST)
-    public String applicationInfo( @RequestParam("file") MultipartFile uploadfile) {
+    @RequestMapping(value = "rest/deploy/create", method = RequestMethod.POST)
+    public String applicationInfo(@RequestParam("file") MultipartFile uploadfile) {
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         RepositoryService repositoryService = processEngine.getRepositoryService();
         DeploymentBuilder deploymentBuilder = repositoryService.createDeployment();
@@ -53,11 +55,34 @@ public class BpmRestController {
         return deploymentBuilder.addInputStream("diagram_1.bpmn", uploadFileStream).deploy().getId();
     }
 
-    @RequestMapping("/test/kafka_send")
-    public void sentToKafka() {
-        //send message
+    @RequestMapping("/test/kafka/start_process")
+    public void startProcess() {
         String processKey = "TestProcess";
         ProducerRecord<String, Message> producerRecord = new ProducerRecord<>(this.kafkaConfig.getProducers().getBpm().getGroupTopic(), UUID.randomUUID().toString(), new StartProcessRequestDto(processKey));
+        producerRecord.headers().add(Headers.GPB_SOURCE_INSTANCE_ID.name(), this.kafkaConfig.getSpecificConsumer().getGroupId().getBytes());
+        producerRecord.headers().add(Headers.GPB_REPLY_TOPIC_NAME.name(), this.kafkaConfig.getSpecificConsumer().getTopic().getBytes());
+        producerRecord.headers().add(Headers.GPB_MESSAGE_ID.name(), UUID.randomUUID().toString().getBytes());
+        producerRecord.headers().add(Headers.GPB_VERSION.name(), "1".getBytes());
+        producerRecord.headers().add(KafkaHeaders.REPLY_TOPIC, this.kafkaConfig.getSpecificConsumer().getTopic().getBytes());
+        this.kafkaTemplate.send(producerRecord);
+    }
+
+    @RequestMapping("/test/kafka/get_tasks")
+    public void getTasks() {
+        String processId = "6318";
+        ProducerRecord<String, Message> producerRecord = new ProducerRecord<>(this.kafkaConfig.getProducers().getBpm().getGroupTopic(), UUID.randomUUID().toString(), new GetTasksRequestDto(processId));
+        producerRecord.headers().add(Headers.GPB_SOURCE_INSTANCE_ID.name(), this.kafkaConfig.getSpecificConsumer().getGroupId().getBytes());
+        producerRecord.headers().add(Headers.GPB_REPLY_TOPIC_NAME.name(), this.kafkaConfig.getSpecificConsumer().getTopic().getBytes());
+        producerRecord.headers().add(Headers.GPB_MESSAGE_ID.name(), UUID.randomUUID().toString().getBytes());
+        producerRecord.headers().add(Headers.GPB_VERSION.name(), "1".getBytes());
+        producerRecord.headers().add(KafkaHeaders.REPLY_TOPIC, this.kafkaConfig.getSpecificConsumer().getTopic().getBytes());
+        this.kafkaTemplate.send(producerRecord);
+    }
+
+    @RequestMapping("/test/kafka/complete_tasks")
+    public void completeTasks() {
+        String[] taskId = {"6317"};
+        ProducerRecord<String, Message> producerRecord = new ProducerRecord<>(this.kafkaConfig.getProducers().getBpm().getGroupTopic(), UUID.randomUUID().toString(), new CompleteTasksRequestDto(taskId));
         producerRecord.headers().add(Headers.GPB_SOURCE_INSTANCE_ID.name(), this.kafkaConfig.getSpecificConsumer().getGroupId().getBytes());
         producerRecord.headers().add(Headers.GPB_REPLY_TOPIC_NAME.name(), this.kafkaConfig.getSpecificConsumer().getTopic().getBytes());
         producerRecord.headers().add(Headers.GPB_MESSAGE_ID.name(), UUID.randomUUID().toString().getBytes());
