@@ -1,27 +1,30 @@
 spring:
-  cloud:
-    bus:
-      enabled: true
-    stream:
-      kafka:
-        binder:
-          brokers: kafka:9092
-      default-binder: kafka
-    consul:
-      host: 80.78.249.80
-      port: 8500
-      config:
-        failFast: true
-        enabled: true
-        format: FILES
-        prefix: configuration/master
-        #defaultContext: allApps
-        #profileSeparator: ';'
-        #format: YAML
-      discovery:
-        instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
-        healthCheckPath: /actuator/health
-        healthCheckInterval: 15s
-        tags: urlprefix-/application
   application:
     name: clientservice
+  cloud:
+    consul:
+      host: http://10.8.4.156
+      port: 8500
+      discovery:
+        instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        healthCheckPath: ${management.endpoints.web.base-path}/health
+        healthCheckInterval: 15s
+        tags: clientservice
+      config:
+        format: FILES
+        prefix: rkk2_configs/master
+        enabled: true
+        failFast: false
+    vault:
+      host: d50035.reg.regrucolo.ru
+      port:  443
+      scheme: https
+      uri: https://d50035.reg.regrucolo.ru/vault
+      connection-timeout: 5000
+      read-timeout: 5000
+      authentication: TOKEN
+      token: 6f29b839-9fd7-70f9-243c-b19adef68175
+
+
+
+    #{app: clientservice, token: 6f29b839-9fd7-70f9-243c-b19adef68175}

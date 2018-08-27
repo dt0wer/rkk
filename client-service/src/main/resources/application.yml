@@ -2,14 +2,14 @@
 #   Database Settings
 ###
 postgresql:
-  host: pgclientservice
+  host: 10.15.20.1
   port: 5432
-  defaultschema: client_service
-  database: client_service
-  user: client_service
-  password: client_service
-  superuser: root
-  superuserpassword: root
+  defaultschema: public
+  database: clientservice
+  user: clientservice
+  password: clientservice-password
+  superuser: clientservice
+  superuserpassword: clientservice-password
 
 spring:
   datasource:

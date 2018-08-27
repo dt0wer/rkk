@@ -1,0 +1,11 @@
+pluginManagement {
+    repositories {
+        maven {
+            url "${GRADLE_PLUGINS_URL}"
+        }
+    }
+}
+
+rootProject.name = 'client-service'
+
+

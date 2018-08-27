@@ -35,15 +35,7 @@ public class TransactionConfig {
 
     @Autowired
     Environment environment;
-/*
-    spring.jpa.database-platform=
-    spring.jpa.generate-ddl=false
-    spring.jpa.hibernate.ddl-auto=
-    spring.jpa.show-sql=false
-spring.jpa.hibernate.use-new-id-generator-mappings=true
-spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults
-    */
+
     protected Properties buildHibernateProperties()
     {
         Properties hibernateProperties = new Properties();
@@ -81,18 +73,7 @@ spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults
     public PlatformTransactionManager txManager(SessionFactory sessionFactory) {
         return new HibernateTransactionManager(sessionFactory);
     }
-/*
-    spring.liquibase.change-log=classpath:/db/changelog/db.changelog-master.yaml
-    spring.liquibase.check-change-log-location=true
-    spring.liquibase.contexts=
-    spring.liquibase.default-schema=
-    spring.liquibase.drop-first=false
-    spring.liquibase.enabled=true
-    spring.liquibase.labels=
-    spring.liquibase.parameters.*=
-    spring.liquibase.password=
-    spring.liquibase.rollback-file=
-    */
+
     @Bean (name = LIQUIBASE_DATASOURCE_BEAN)
     DataSource liquibaseDatasource (){
         return DataSourceBuilder.create().

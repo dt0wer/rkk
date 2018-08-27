@@ -1,33 +1,52 @@
+import java.text.SimpleDateFormat
+
 buildscript {
     ext {
         springBootVersion = '2.0.3.RELEASE'
-        mapstructVersion = '1.2.0.Final'
+        springCloudVersion = 'Finchley.SR1'
     }
     repositories {
+        maven {
+            url "${NEXUS_URL}"
+            credentials {
+                username "${NEXUS_USER}"
+                password "${NEXUS_PASSWORD}"
+            }
+        }
+        maven {
+            url "${NEXUS_URL_RELEASE}"
+            credentials {
+                username "${NEXUS_USER}"
+                password "${NEXUS_PASSWORD}"
+            }
+        }
         mavenCentral()
     }
     dependencies {
         classpath('com.github.javaparser:javaparser-core:3.6.15')
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE")
     }
 }
 
 plugins {
     id "java"
     id "idea"
+    id 'application'
+    id 'maven'
     id "org.springframework.boot" version "2.0.3.RELEASE"
     id "io.spring.dependency-management" version "1.0.4.RELEASE"
     id "com.palantir.docker" version "0.20.1"
     id 'net.ltgt.apt' version '0.15'
+
+
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'net.ltgt.apt-idea'
-apply plugin: 'net.ltgt.apt-eclipse'
 
 group = 'com.gpb.rkk.clientservice'
 version = '0.0.1'
@@ -35,13 +54,75 @@ version = '0.0.1'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-repositories {
-    mavenCentral()
+bootJar {
+    manifest{
+        attributes 'Version': version,
+                'Build-time': new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss").format(new Date())
+    }
+
 }
 
+jar {
+    baseName = 'clientservice'
+    enabled = false
+}
+
+artifacts {
+    archives bootJar
+}
+
+mainClassName = 'ru.gpb.rkk.clientservice.Application'
+
+repositories {
+    maven {
+        url "${NEXUS_URL}"
+        credentials {
+            username "${NEXUS_USER}"
+            password "${NEXUS_PASSWORD}"
+        }
+    }
+    maven {
+        url "${NEXUS_URL_RELEASE}"
+        credentials {
+            username "${NEXUS_USER}"
+            password "${NEXUS_PASSWORD}"
+        }
+    }
+    mavenLocal()
+}
+
+docker {
+    name "customer_service"
+    files bootJar.archivePath
+    buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+}
 
 ext {
     springCloudVersion = 'Finchley.SR1'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom "org.springframework.cloud:spring-cloud-consul-dependencies:2.0.0.RELEASE"
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.groupId = project.group
+            pom.artifactId = project.name
+            pom.version = version
+            repository(url: "${NEXUS_DEPLOY_URL}/repository/maven-releases")
+                    { authentication(userName: NEXUS_USER, password: NEXUS_PASSWORD)}
+            snapshotRepository(url: "${NEXUS_DEPLOY_URL}/repository/maven-snapshots")
+                    { authentication(userName: NEXUS_USER, password: NEXUS_PASSWORD)}
+            addFilter('bootJar'){
+                artifact, file -> ("jar" == artifact.type)
+            }
+        }
+    }
 }
 
 dependencies {
@@ -57,7 +138,7 @@ dependencies {
     runtime 'org.postgresql:postgresql'
     implementation('org.apache.commons:commons-dbcp2:2.5.0')
 
-    compile project(':kafka-commons')
+    implementation 'ru.gpb.rkk2:kafka-commons:1.0.0.3-d5a7f3f'
 
     compile group: 'org.mapstruct', name: 'mapstruct-jdk8', version: '1.2.0.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.2.0.Final'
@@ -66,8 +147,9 @@ dependencies {
     testCompile('org.springframework.cloud:spring-cloud-stream-test-support')
 }
 
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+task teamcity() {
+    doLast {
+        print("##teamcity[buildNumber '${version}']")
     }
 }
+
