@@ -27,8 +27,8 @@ public enum Headers {
     GPB_MESSAGE_ID,
 
     /**
-     * This header MUST BE filled with MESSAGE_ID from income request
-     * For linked request-response
+     * This header MUST BE filled with MESSAGE_ID from income requestClient
+     * For linked requestClient-response
      */
     GPB_CORRELATION_ID,
 

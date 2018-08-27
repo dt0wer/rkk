@@ -7,8 +7,11 @@ import ru.integrations.commons.Message;
 @Data
 @AllArgsConstructor
 public class RequestCreateClientDto implements Message {
-    private String applicationId;
-    private ClientDto request;
+    private String sourceSystemName;
+
+    private String sourceRequestId;
+
+    private RequestClient request;
 
     public RequestCreateClientDto() {
     }

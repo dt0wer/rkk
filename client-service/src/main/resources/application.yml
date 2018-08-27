@@ -1,20 +1,92 @@
 ###
 #   Database Settings
 ###
+postgresql:
+  host: pgclientservice
+  port: 5432
+  defaultschema: client_service
+  database: client_service
+  user: client_service
+  password: client_service
+  superuser: root
+  superuserpassword: root
+
 spring:
   datasource:
     dbcp2:
-      password: posgtres
-      username: postgres
-      url:  jdbc:postgresql://localhost:5432/client-service
+      password: ${postgresql.password}
+      username: ${postgresql.user}
+      url:  jdbc:postgresql://${postgresql.host}:${postgresql.port}/${postgresql.database}
       driver-class-name: org.postgresql.Driver
+  application:
+    name: clientservice
+
+# Liquibse properties
+
+  liquibase:
+    change-log: classpath:/liquibase.scripts/changelog.xml
+    check-change-log-location: true
+    user: ${postgresql.superuser}
+    password: ${postgresql.superuserpassword}
+    url: jdbc:postgresql://${postgresql.host}:${postgresql.port}/${postgresql.database}
 
 # Hibernate properties
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+   # database: ${postgresql.database}
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
     show-sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
+      use-new-id-generator-mappings: true
       naming:
-        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+
+
+#Core settings
+server:
+  port: 8083
+service:
+  name: clientservice
+  versions: 2.3
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream, info, health
+      base-path: /actuator
+kafka:
+  bootstrapServers: kafka:9092
+  properties:
+   "[ssl.keystore.location]": /path
+   "[ssl.keystore.password]": 12345
+   "[ssl.keystore.type]": JKS
+   "[ssl.key.password]": 12345
+   "[ssl.truststore.location]": /path
+   "[ssl.truststore.password]": 12345
+   "[ssl.truststore.type]": JKS
+   "[ssl.enabled.protocols]": TLSv1.2
+   "[security.protocol]": SSL
+  groupConsumer:
+    groupId: ${spring.application.name}
+    pollTimeout: 3000
+    concurrency: 1
+    topic: ${spring.application.name}_group
+  specificConsumer:
+    groupId: ${spring.cloud.consul.discovery.instanceId}
+    pollTimeout: 3000
+    concurrency: 1
+    topic: ${spring.application.name}_specific
+  producers:
+    clientservice:
+        groupTopic:  clientservice_group
+        specificTopic: clientservice_specific
+    bpm:
+        groupTopic:  bpm_group
+        specificTopic: bpm_specific
+
+

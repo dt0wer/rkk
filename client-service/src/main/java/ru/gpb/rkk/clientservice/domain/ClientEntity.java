@@ -1,13 +1,21 @@
 package ru.gpb.rkk.clientservice.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Column;
+import java.io.Serializable;
 import java.util.Date;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+
 @Entity
 @Table(name = "client")
-public class Client {
+public class ClientEntity implements Serializable {
+
+    private static final long serialVersionUID = -6650267383987778434L;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -27,7 +35,7 @@ public class Client {
     private String patronymic;
 
     @Column(name="birth_date")
-    private Date birthDate;
+    private Date birthdate;
 
     @Column(name="document_type")
     private String documentType;
@@ -78,12 +86,12 @@ public class Client {
         this.patronymic = patronymic;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
+    public Date getBirthdate() {
+        return birthdate;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
     }
 
     public String getDocumentType() {
@@ -112,12 +120,12 @@ public class Client {
 
     @Override
     public String toString() {
-        return "Client{" +
+        return "ClientEntity{" +
                 "clientId=" + clientId +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", patronymic='" + patronymic + '\'' +
-                ", birthDate=" + birthDate +
+                ", birthdate=" + birthdate +
                 ", documentType='" + documentType + '\'' +
                 ", documentSeries='" + documentSeries + '\'' +
                 ", documentNumber='" + documentNumber + '\'' +

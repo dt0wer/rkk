@@ -1,0 +1,27 @@
+spring:
+  cloud:
+    bus:
+      enabled: true
+    stream:
+      kafka:
+        binder:
+          brokers: kafka:9092
+      default-binder: kafka
+    consul:
+      host: 80.78.249.80
+      port: 8500
+      config:
+        failFast: true
+        enabled: true
+        format: FILES
+        prefix: configuration/master
+        #defaultContext: allApps
+        #profileSeparator: ';'
+        #format: YAML
+      discovery:
+        instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        healthCheckPath: /actuator/health
+        healthCheckInterval: 15s
+        tags: urlprefix-/application
+  application:
+    name: clientservice

@@ -5,8 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class ClientDto {
-    private Long clientId;
+public class RequestClient {
 
     private String name;
 
@@ -14,7 +13,7 @@ public class ClientDto {
 
     private String patronymic;
 
-    private Date birthDate;
+    private Date birthdate;
 
     private String documentType;
 
